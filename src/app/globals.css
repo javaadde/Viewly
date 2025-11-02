@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Offside&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 :root {
   --background: #ffffff;
@@ -14,13 +15,37 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #010101;
     --foreground: #ededed;
   }
+}
+
+*{
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+   font-family: "SUSE Mono", sans-serif;
+}
+
+.slider::-webkit-scrollbar {
+    display: none;
+  }
+
+
+#home{
+  background-image: url("../../public/venom1.jpg");
+  background-repeat: no-repeat;
+  background-position:center;
+}
+
+
+.font-suse-mono{
+   font-family: "SUSE Mono", sans-serif;
+}
+
+.font-offside{
+   font-family: "Offside", sans-serif;
 }
