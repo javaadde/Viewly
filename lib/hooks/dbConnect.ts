@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 dotenv.config();
-const dbHost= process.env.MONGO_URi;
+const dbHost = process.env.MONGODB_URI;
 
-export async function dbConnect(){
-try{
-    await mongoose.connect(dbHost!)
-}
-catch(err){
-console.log(err);
-
-}
-
+export async function dbConnect() {
+  try {
+    console.log(dbHost)
+    await mongoose.connect(dbHost!);
+  } catch (err) {
+    console.log(err);
+  }
 }
