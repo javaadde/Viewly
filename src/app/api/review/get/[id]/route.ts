@@ -2,11 +2,11 @@ import {dbConnect} from "@/lib/dbConnect";
 import Review from "@/models/model.reviews";
 
 
-export async function GET(request: Request,  { params }: { params: { id: string } }) {
+export async function GET(request: Request,  { params }: { params: Promise<{ id: string }> }) {
     
     try {
 
-        const id = params.id;
+        const { id } = await params;
         console.log("Fetching reviews for movieId:", id);
         await dbConnect();
         const data = await Review.find({ movieId: id });
