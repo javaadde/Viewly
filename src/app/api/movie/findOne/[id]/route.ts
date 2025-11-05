@@ -6,8 +6,7 @@ import { dbConnect } from "../../../../../lib/dbConnect";
 export async function GET(req: Request, { params }: { params:{ id: string } }) {
     try {
      
-        const { id } = params;
-       
+        const id = params.id;
         await dbConnect();
         const movie = await Movie.findOne({ _id:id});
         if (!movie) {
