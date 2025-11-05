@@ -1,56 +1,98 @@
-import React, { useEffect } from 'react';
+'use client';
+import { useEffect ,useState} from 'react';
 import axios from 'axios';
 import { Star, Film, MessageSquare, Sparkles } from 'lucide-react'; 
 import { Movie } from '@/types/Movie.type';
 import { Review } from '@/types/Review.type';
-
-
-async function getMovieDetails(id: string):Promise<Movie> {
-  
-   const fullUrl = `http://localhost:3000/api/movie/findOne/${id}`;
-   const res = await axios.get(fullUrl);
-    return res.data;
-}
+import {toast, ToastContainer} from 'react-toastify';
+import { useParams } from 'next/navigation';
 
 
 
-// Mock function to get reviews (in a real app, this would be part of your API)
-async function getMovieReviews(movieId: string) {
-  return [
-    { _id: 1, movieId:'', username: "CinePhile101", comment: "Absolutely mind-bending! Nolan's best work since The Dark Knight. The visuals were stunning." },
-    { _id: 2, movieId:'', username: "MovieFanatic", comment: "I was a bit confused at times, but the ending made it all worth it. DiCaprio was fantastic as always." },
-    { _id: 3, movieId:'', username: "CasualViewer", comment: "Great movie. A bit long, but it kept my attention. 8/10." },
-  ];
-}
+
+export default  function MovieDetailsPage() {
 
 
+  const params = useParams();
+  const { movieId } =  params;
+  const [refetchReviews, setRefetchReviews] = useState(false);
 
-export default async function MovieDetailsPage({ params }: { params: Promise<{ movieId: string }> }) {
+  const [movie, setMovie] = useState<Movie>({
+    _id: '',
+    name: 'movie',       
+    description: '',
+    rating: 0,
+    imageUrl: 'image',
+  });
+
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [username, setUsername] = useState(null); // Placeholder username 
+ 
+
+  useEffect(() => {
 
 
-  const { movieId } = await params;
-  const movie: Movie = await getMovieDetails(movieId);
-  const reviews: Review[] = await getMovieReviews(movieId);
-  
+    const fetchDatas = async () => {
+        const res = await axios.get(`/api/movie/findOne/${movieId}`);
+        setMovie(res.data);
+    }
 
-  
+    axios.get('/api/user').then(response => {
+      if (response.data.user) {
+        setUsername(response.data.user.username);
+        console.log("User data:", response.data.user.username);
+      }
+    }).catch(error => {
+      console.error('Error fetching user data:', error);
+    });
 
+     fetchDatas();
+
+  }, []);
+
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await axios.get(`/api/review/get/${movieId}`);  
+        setReviews(res.data.reviews);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+    fetchReviews();
+  }, [refetchReviews]);
 
 
 
   // This would be a server action in a real Next.js 14 app
-  async function handleReviewSubmit(formData: FormData) {
-    'use server';
-
-    const reviewText = formData.get('reviewText');
+  async function handleReviewSubmit() {
+     
+      if(!username){
+        toast.error("You must be logged in to submit a review.");
+        return;
+      }
     
-   
+      const reviewText = document.getElementById('reviewText') as HTMLTextAreaElement;
+     console.log(reviewText.value)
+      const res =  await axios.post('/api/review/add', {
+        movieId: movieId,
+        username: username, // In a real app, get this from user session
+        comment: reviewText.value,
+      });
+
+      toast.success(res.data.message);
+      setRefetchReviews(!refetchReviews);
+  
   }
 
   
 
   return (
     <div className="min-h-screen bg-gray-950 comment-white">
+
+      <ToastContainer />
+
       {/* Simplified Hero / Main Info Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12">
@@ -104,20 +146,21 @@ export default async function MovieDetailsPage({ params }: { params: Promise<{ m
               Reviews & Comments
             </h2>
             
-            {/* Summarize Button */}
+            {/* Summarize Button
             <button 
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg"
               // onClick={handleSummarize} // This would need to be a client component
             >
               <Sparkles className="w-5 h-5" />
               Summarize Reviews with AI
-            </button>
+            </button> */}
           </div>
 
           {/* Submit Review Form (Server Action) */}
           <form action={handleReviewSubmit} className="mb-8 p-6 bg-gray-900/50 rounded-lg border border-gray-800">
             <h3 className="text-xl font-semibold mb-3">Leave a Review</h3>
             <textarea
+              id='reviewText'
               name="reviewText"
               className="w-full h-24 p-3 bg-gray-800 rounded-md border border-gray-700 comment-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="What did you think of the movie?"
@@ -125,6 +168,7 @@ export default async function MovieDetailsPage({ params }: { params: Promise<{ m
             ></textarea>
             <button 
               type="submit" 
+             
               className="mt-3 px-6 py-2 cursor-pointer bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors"
             >
               Submit Review

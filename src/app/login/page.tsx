@@ -1,38 +1,37 @@
-'use client'
-import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import {ToastContainer,toast} from 'react-toastify'
-import axios from 'axios';
-import {useRouter} from 'next/navigation';
-
+"use client";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsLoading(true);
-    
-   axios.post('/api/login',{email,password})
-   .then((res)=>{
-       setIsLoading(false);
-       toast(res.data.message || 'Login successful!');
-         router.push('/'); 
-   })
-   .catch((error) => {
-      console.error(error)
-   })
-   
+
+    axios
+      .post("/api/login", { email, password })
+      .then((res) => {
+        setIsLoading(false);
+        toast(res.data.message || "Login successful!");
+        router.push("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-9 px-4">
-
-      <ToastContainer/>
+      <ToastContainer />
 
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -72,13 +71,16 @@ export default function LoginPage() {
                 <label className="block text-sm font-medium text-white">
                   Password
                 </label>
-                <a href="#" className="text-xs text-neutral-400 hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-xs text-neutral-400 hover:text-white transition-colors"
+                >
                   Forgot?
                 </a>
               </div>
               <div className="relative">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -101,7 +103,7 @@ export default function LoginPage() {
               disabled={isLoading}
               className="w-full bg-white text-black font-semibold py-3 rounded-lg hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </div>
 
@@ -133,10 +135,10 @@ export default function LoginPage() {
 
           {/* Sign up link */}
           <p className="mt-8 text-center text-neutral-400">
-            Don't have an account?{' '}
-            <a href="#" className="text-white hover:underline font-medium">
-              Sign up
-            </a>
+            Don't have an account?{" "}
+            <Link href="/register">
+              <span className="text-white hover:underline font-medium">Sign up</span>
+            </Link>
           </p>
         </div>
       </div>

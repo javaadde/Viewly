@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Eye, EyeOff, Check } from 'lucide-react';
 import axios from 'axios'
 import { ToastContainer,toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 export default function SignupPage() {
@@ -203,13 +204,13 @@ export default function SignupPage() {
               />
               <label htmlFor="terms" className="text-sm text-neutral-400">
                 I agree to the{' '}
-                <a href="#" className="text-white hover:underline">
+                <Link href="#" className="text-white hover:underline">
                   Terms of Service
-                </a>{' '}
+                </Link>{' '}
                 and{' '}
-                <a href="#" className="text-white hover:underline">
+                <Link href="#" className="text-white hover:underline">
                   Privacy Policy
-                </a>
+                </Link>
               </label>
             </div>
 
@@ -252,9 +253,9 @@ export default function SignupPage() {
           {/* Login link */}
           <p className="mt-8 text-center text-neutral-400">
             Already have an account?{' '}
-            <a href="#" className="text-white hover:underline font-medium">
+            <Link href="/login" className="text-white hover:underline font-medium">
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
       </div>
