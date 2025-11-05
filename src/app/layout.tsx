@@ -25,7 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-       < link rel="icon" href="/logo-viewly.png" />
+        <title>Viewly</title>
+       <link rel="icon" href="/logo-viewly.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Offside&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap"
           rel="stylesheet"
