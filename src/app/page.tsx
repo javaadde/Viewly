@@ -78,7 +78,7 @@ export default function Home() {
     </section>
 
 
-     <section id="footer" className="h-63 w-full bg-gray-700" >
+     <section id="footer" className="h-63 w-full bg-[#1e1d1de8]" >
        
      </section>
 
