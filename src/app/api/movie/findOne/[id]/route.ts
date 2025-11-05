@@ -3,10 +3,10 @@ import { dbConnect } from "../../../../../lib/dbConnect";
 
 
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: Request, { params }: { params:{ id: string } }) {
     try {
      
-        const { id } = await params;
+        const { id } = params;
        
         await dbConnect();
         const movie = await Movie.findOne({ _id:id});
