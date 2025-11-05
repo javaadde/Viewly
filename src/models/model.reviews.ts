@@ -6,8 +6,7 @@ const reviewSchema = new mongoose.Schema({
     },
     username:String,
     comment:String,
-    stars:Number,
-
+    
 },{timestamps:true})
 
 export default mongoose.model("Review", reviewSchema);

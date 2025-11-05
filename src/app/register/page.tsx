@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Eye, EyeOff, Check } from 'lucide-react';
 import axios from 'axios'
 import { ToastContainer,toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,8 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
   });
+
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,12 +35,13 @@ export default function SignupPage() {
       alert('Please agree to the terms and conditions');
       return;
     }
-    // setIsLoading(true);
+    setIsLoading(true);
     
     axios.post('/api/register',formData)
     .then((res)=>{
-        // setIsLoading(false);
+        setIsLoading(false);
         toast(res.data)
+        router.push('/');
     })
    
    

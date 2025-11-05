@@ -1,15 +1,17 @@
 'use client'
-
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import {ToastContainer,toast} from 'react-toastify'
 import axios from 'axios';
+import {useRouter} from 'next/navigation';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
@@ -18,7 +20,8 @@ export default function LoginPage() {
    axios.post('/api/login',{email,password})
    .then((res)=>{
        setIsLoading(false);
-       toast(res.data);
+       toast(res.data.message || 'Login successful!');
+         router.push('/'); 
    })
    .catch((error) => {
       console.error(error)

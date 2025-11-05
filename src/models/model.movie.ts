@@ -8,4 +8,4 @@ const movieSchema = new mongoose.Schema({
     imageUrl:String,
 },{timestamps:true});
 
-export default mongoose.model("Movie", movieSchema);
+export default  mongoose.models.Movie || mongoose.model("Movie", movieSchema);

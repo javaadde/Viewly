@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import Users from "../../../../models/model.user";
+import Users from "../../../models/model.user";
 import bcrypt from "bcrypt";
-import { dbConnect } from "../../../../lib/hooks/dbConnect";
+import { dbConnect } from "../../../lib/dbConnect";
+import { getSession } from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
@@ -11,17 +12,35 @@ export async function POST(req: Request) {
     await dbConnect();
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-    await Users.create({
+    const {_id} = await Users.create({
       username: fullName,
       email: email,
       password: hashedPassword,
     });
 
+            const session = await getSession();
+           
+            // Set session data
+            session.user = {
+                id:_id,
+                username:fullName,
+                email: email
+            };
+            
+            // Save session
+            await session.save();
+
+
+            console.log(session);
+            
+
     return new Response(`account created for ${email}`);
   } catch (error) {
     console.error(error);
-    if (typeof error === "object") {
-      return new Response("user is allready exist");
+    if (error === "object") {
+        if((error as any).code === 11000){
+          return new Response("user is allready exist");
+        }
     }
     return new Response("error occured during registration");
   }
