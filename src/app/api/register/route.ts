@@ -24,7 +24,8 @@ export async function POST(req: Request) {
             session.user = {
                 id:_id,
                 username:fullName,
-                email: email
+                email: email,
+                role: "user",
             };
             
             // Save session

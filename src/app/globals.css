@@ -36,7 +36,7 @@ body {
 
 
 #home{
-  background-image: url("../../public/venom1.jpg");
+  background-image: url("/venom1.jpg");
   background-repeat: no-repeat;
   background-position:center;
 }
