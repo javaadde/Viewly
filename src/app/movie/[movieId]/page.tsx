@@ -1,5 +1,5 @@
 'use client';
-import { useEffect ,useState} from 'react';
+import { useEffect ,useRef,useState} from 'react';
 import axios from 'axios';
 import { Star, Film, MessageSquare, Sparkles } from 'lucide-react'; 
 import { Movie } from '@/types/Movie.type';
@@ -27,6 +27,7 @@ export default  function MovieDetailsPage() {
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [username, setUsername] = useState(null); // Placeholder username 
+  const [textarea, setTextarea] = useState(''); // State for textarea value
  
 
   useEffect(() => {
@@ -73,12 +74,16 @@ export default  function MovieDetailsPage() {
         return;
       }
     
-      const reviewText = document.getElementById('reviewText') as HTMLTextAreaElement;
-     console.log(reviewText.value)
+      
+      if (textarea === null) {
+        toast.error("Review text cannot be empty.");
+        return;
+      }      
+      
       const res =  await axios.post('/api/review/add', {
         movieId: movieId,
-        username: username, // In a real app, get this from user session
-        comment: reviewText.value,
+        username: username, 
+        comment: textarea,
       });
 
       toast.success(res.data.message);
@@ -160,7 +165,7 @@ export default  function MovieDetailsPage() {
           <form action={handleReviewSubmit} className="mb-8 p-6 bg-gray-900/50 rounded-lg border border-gray-800">
             <h3 className="text-xl font-semibold mb-3">Leave a Review</h3>
             <textarea
-              id='reviewText'
+              onChange={(e)=>{setTextarea(e.target.value)}}
               name="reviewText"
               className="w-full h-24 p-3 bg-gray-800 rounded-md border border-gray-700 comment-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="What did you think of the movie?"
