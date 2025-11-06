@@ -10,3 +10,4 @@ export async function getSession() {
     return getIronSession<SessionData>(cookieStore, SessionConfig);
 
 }
+ 
