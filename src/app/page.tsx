@@ -1,43 +1,24 @@
-'use client';
+
 import Navbar from "../components/Navbar";
 import MovieSlider from "../components/MovieSlider";
-import { useEffect, useState } from "react";
 import axios from "axios";
 
-// const trending = [
-//   { title: "Dune", posterPath: "/venom2.jpg", releaseDate: "2023-08-15", voteAverage: 9.3 },
-//   { title: "Batman", posterPath: "/venom3.jpg", releaseDate: "2023-07-20", voteAverage: 8.9 },
-//   { title: "Superman", posterPath: "/venom3.jpg", releaseDate: "2023-09-01", voteAverage: 8.7 },
-//   { title: "Wonder Woman", posterPath: "/venom3.jpg", releaseDate: "2023-08-25", voteAverage: 8.6 },
-//   { title: "Aquaman", posterPath: "/venom3.jpg", releaseDate: "2023-09-10", voteAverage: 8.4 },
-//   { title: "Flash", posterPath: "/venom3.jpg", releaseDate: "2023-08-30", voteAverage: 8.8 }
-// ];
 
-// const greatestOfAllTime = [
-//   { title: "The Godfather", posterPath: "/venom2.jpg", releaseDate: "1972-03-24", voteAverage: 9.8 },
-//   { title: "Pulp Fiction", posterPath: "/venom3.jpg", releaseDate: "1994-10-14", voteAverage: 9.7 },
-//   { title: "Shawshank Redemption", posterPath: "/venom3.jpg", releaseDate: "1994-09-23", voteAverage: 9.9 },
-//   { title: "The Dark Knight", posterPath: "/venom3.jpg", releaseDate: "2008-07-18", voteAverage: 9.6 },
-//   { title: "Fight Club", posterPath: "/venom3.jpg", releaseDate: "1999-10-15", voteAverage: 9.5 },
-//   { title: "Matrix", posterPath: "/venom3.jpg", releaseDate: "1999-03-31", voteAverage: 9.4 }
-// ];
+async function fetchNewReleases() {
+  const baseUrl = process.env.BASE_URL;
+  try {
+    const response = await axios.get(`${baseUrl}/api/movie/find`);
+    return response.data
+  } catch (error) {
+    console.error('Error fetching new releases:', error);
+    return [];
+  }
+} 
 
-export default function Home() {
-
-
-  const [newReleases, setNewReleases] = useState([]);
-
-
-  useEffect(() => {
-      axios.get('/api/movie/find')
-      .then((res)=>{
-        console.log(res)
-          setNewReleases(res.data); 
-      })
-      .catch((err)=>{
-          console.error(err);
-      });
-  },[])
+export default async function Home() {
+  
+  
+  const newReleases = await fetchNewReleases();
 
   return (
     <>
@@ -56,7 +37,7 @@ export default function Home() {
           <MovieSlider movies={newReleases} />
         </div>
 
-        {/* Trending Section */}
+       
         <div id="trending" className="space-y-6">
          <div className="px-5 py-13 flex justify-center items-center flex-col">
             <h2 className="text-xl px-8 py-4 bg-[#272727] rounded-full font-bold text-white">Trending</h2>
@@ -74,13 +55,12 @@ export default function Home() {
           <MovieSlider movies={newReleases} />
         </div>
 
+     <footer id="footer" className="h-63 w-full bg-[#1e1d1de8]" > </footer>
+
 
     </section>
 
 
-     <section id="footer" className="h-63 w-full bg-[#1e1d1de8]" >
-       
-     </section>
 
     </>
   );

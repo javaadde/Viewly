@@ -1,8 +1,8 @@
-'use client';
 
 import Image from 'next/image'
 import React from 'react'
-import { useRouter } from 'next/navigation';
+import Link from 'next/link'
+
 
 interface MovieCardProps {
   id:string
@@ -15,10 +15,8 @@ interface MovieCardProps {
 
 const MovieCard = ({ name, imageUrl, rating ,id}: MovieCardProps) => {
   
-    const router = useRouter()
-    const handleClick = () => {
-       router.push(`/movie/${id}`);
-    }
+   
+   
 
   // FIX: Added defensive check for empty/missing imageUrl to prevent the "src="" was passed" error.
   if (!imageUrl || imageUrl.trim() === "") {
@@ -26,8 +24,9 @@ const MovieCard = ({ name, imageUrl, rating ,id}: MovieCardProps) => {
   }
     
   return (
+
+    <Link href={`/movie/${id}`}>
     <div
-      onClick={handleClick}
      className="relative group cursor-pointer rounded-2xl shadow-xl hover:shadow-gray-800 transition-all duration-200 hover:-translate-y-6">
       {/* Card Container */}
       <div className="relative w-[200px] h-[300px] rounded-lg overflow-hidden shadow-lg transition-all duration-300">
@@ -55,6 +54,7 @@ const MovieCard = ({ name, imageUrl, rating ,id}: MovieCardProps) => {
         </div>
       </div>
     </div>
+    </Link>
   )
 }
 
